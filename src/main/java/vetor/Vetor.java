@@ -1,6 +1,5 @@
 package vetor;
 
-import java.util.Arrays;
 import java.util.Comparator;
 
 /**
@@ -10,7 +9,7 @@ import java.util.Comparator;
  * @author Adalberto
  *
  */
-public class Vetor<T> {
+public class Vetor<T extends Comparable<T>> {
 
 	// O array interno onde os objetos manipulados são guardados
 	private T[] arrayInterno;
@@ -29,7 +28,7 @@ public class Vetor<T> {
 		super();
 		this.tamanho = tamanho;
 		this.indice = -1;
-		this.arrayInterno = (T[])(new Object[tamanho]);
+		this.arrayInterno = (T[])(new Comparable[tamanho]);
 	}
 
 	public void setComparadorMaximo(Comparator comparadorMaximo) {
@@ -104,8 +103,52 @@ public class Vetor<T> {
 		return this.tamanho - 1 == this.indice;
 	}
 
-	public void teste(){
-        System.out.println(Arrays.toString(this.arrayInterno));
+	public T maximo(){
+	    T maximo = null;
+
+	    if(!isVazio()){
+	        maximo = this.arrayInterno[0];
+
+	        for(int i = 1; i <= this.indice; i++){
+	            if(comparadorMaximo.compare(maximo, this.arrayInterno[i]) < 0){
+	                maximo = this.arrayInterno[i];
+                }
+            }
+        }
+
+	    return maximo;
     }
 
+    public T minimo(){
+        T minimo = null;
+
+        if(!isVazio()){
+            minimo = this.arrayInterno[0];
+
+            for(int i = 1; i <= this.indice; i++){
+                if(comparadorMinimo.compare(minimo, this.arrayInterno[i]) < 0){
+                    minimo = this.arrayInterno[i];
+                }
+            }
+        }
+
+        return minimo;
+    }
+}
+
+class ComparatorMaximo implements Comparator<Aluno>{
+
+    @Override
+    public int compare(Aluno aluno, Aluno outroAluno) {
+        return Double.compare(aluno.getMedia(), outroAluno.getMedia());
+    }
+}
+
+
+class ComparatorMinimo implements Comparator<Aluno>{
+
+    @Override
+    public int compare(Aluno aluno, Aluno outroAluno) {
+        return Double.compare(outroAluno.getMedia(), aluno.getMedia());
+    }
 }
